@@ -1,9 +1,0 @@
-Q1)
-Ans)
- color=input("Enter color:").split(',')
-print(color)
-
-print("*",color[0],"*",color[-1],"*")
-
-
-Q2)
