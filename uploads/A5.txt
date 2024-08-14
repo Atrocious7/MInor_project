@@ -1,0 +1,19 @@
+Q1)
+Ans)
+   for i in range(2000, 3201):
+    if (i%7==0) and (i%5!=0):
+        print("Numbers divisible by 7 but not 5:",i)
+Q2)
+Ans)
+    st=5
+    sp=0
+ 
+    for i in range(5):
+     for j in range(st):
+        print("*",end="")
+     for j in range(sp):
+        print(" ",end="")
+    st=st-1
+    sp=sp+1
+    print()
+    

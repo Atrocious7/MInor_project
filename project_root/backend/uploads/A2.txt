@@ -1,0 +1,29 @@
+Q1)
+Ans) radius = float(input("Enter the radius of the circle: "))
+
+
+area = 3.14 * radius * radius
+
+
+print("The area of the circle is:", area)
+
+
+Q2) 
+Ans) 
+name = input("Enter the student's name: ")
+roll_no = input("Enter the roll number: ")
+marks1 = float(input("Enter the marks for subject 1: "))
+marks2 = float(input("Enter the marks for subject 2: "))
+marks3 = float(input("Enter the marks for subject 3: "))
+
+total_marks = marks1 + marks2 + marks3
+percentage = (total_marks * 100) / 300
+
+
+print("\n--- Student Details ---")
+print("Name: " + name)
+print("Roll Number: " + roll_no)
+print("Marks in Subject 1: " + str(marks1))
+print("Marks in Subject 2: " + str(marks2))
+print("Marks in Subject 3: " + str(marks3))
+print("Percentage: " + str(percentage) + "%")

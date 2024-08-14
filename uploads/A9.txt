@@ -1,0 +1,23 @@
+Q1)
+Ans)
+
+color=input("Enter color:").split(',')
+ print(color)
+
+print("*",color[0],"*",color[-1],"*")
+
+Q2)
+Ans)
+emails = input("Enter email addresses separated by commas: ").split(',')
+
+valid = 0
+
+for email in emails:
+    if "@" in email:
+        print(email)
+        print("The email address is valid.")
+        valid += 1
+    else:
+        print("Invalid email. It does not contain '@'.")
+
+print("\nTotal valid email addresses found:" ,valid)

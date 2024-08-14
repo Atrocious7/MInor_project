@@ -1,0 +1,84 @@
+from tkinter import *
+
+window = Tk()
+window.geometry("500x500")
+window.title("Tarun")
+
+# Function to change entry background color on focus
+def on_entry_focusin(event):
+    event.widget.config(bg="yellow")
+
+def on_entry_focusout(event):
+    event.widget.config(bg="#d3d8e0")
+
+# Function to change label text color on hover
+def on_label_enter(event):
+    event.widget.config(fg="yellow")
+
+def on_label_leave(event):
+    event.widget.config(fg="black")
+
+# Heading
+heading = Label(window, text="Cuboid Calculator", font=("Hamston", 20))
+heading.pack()
+
+# Length and its entry box
+label_length = Label(window, text="Length", font=("Hamston", 20))
+entry_length = Entry(window, font=("Hamston", 20), fg="black", bg="#d3d8e0")
+entry_length.pack(side=RIGHT)
+entry_length.bind("<FocusIn>", on_entry_focusin)
+entry_length.bind("<FocusOut>", on_entry_focusout)
+label_length.place(x=40, y=46, width=120, height=40)
+entry_length.place(x=170, y=46, width=120, height=40)
+
+# Breadth and its entry box
+label_breadth = Label(window, text="Breadth", font=("Hamston", 20))
+entry_breadth = Entry(window, font=("Hamston", 20), fg="black", bg="#d3d8e0")
+entry_breadth.pack(side=RIGHT)
+entry_breadth.bind("<FocusIn>", on_entry_focusin)
+entry_breadth.bind("<FocusOut>", on_entry_focusout)
+label_breadth.place(x=40, y=121, width=120, height=40)
+entry_breadth.place(x=170, y=121, width=120, height=40)
+
+# Height and its entry box
+label_height = Label(window, text="Height", font=("Hamston", 20))
+entry_height = Entry(window, font=("Hamston", 20), fg="black", bg="#d3d8e0")
+entry_height.pack(side=RIGHT)
+entry_height.bind("<FocusIn>", on_entry_focusin)
+entry_height.bind("<FocusOut>", on_entry_focusout)
+label_height.place(x=40, y=188, width=120, height=40)
+entry_height.place(x=170, y=188, width=120, height=40)
+
+# Button details
+def click_volume():
+    length = int(entry_length.get())
+    breadth = int(entry_breadth.get())
+    height = int(entry_height.get())
+
+    volume = length * breadth * height
+    answer_v.config(text="Volume: {}".format(volume))
+
+def click_surface_area():
+    length = int(entry_length.get())
+    breadth = int(entry_breadth.get())
+    height = int(entry_height.get())
+
+    area = 2 * ((length * breadth) + (breadth * height) + (height * length))
+    answer_s.config(text="Surface Area: {}".format(area))
+
+button_volume = Button(window, text="Volume", command=click_volume, font=("Hamston", 23), fg="black", bg="#d3d8e0", activeforeground='black', activebackground='#d3d8e0', state=ACTIVE)
+button_surface_area = Button(window, text="Surface area", command=click_surface_area, font=("Hamston", 12), fg="black", bg="#d3d8e0", activeforeground='black', activebackground='#d3d8e0', state=ACTIVE)
+
+button_volume.place(x=188, y=252, width=110, height=50)
+button_surface_area.place(x=188, y=310, width=110, height=50)
+
+answer_v = Label(window, text='', font=("Hamston", 15))
+answer_s = Label(window, text='', font=("Hamston", 15))
+answer_v.place(x=30, y=252, width=110, height=50)
+answer_s.place(x=18, y=310, width=170, height=50)
+
+# Function to change label text color on hover
+heading.bind("<Enter>", on_label_enter)
+heading.bind("<Leave>", on_label_leave)
+
+window.mainloop()

@@ -1,0 +1,20 @@
+import os
+import sys
+
+# Renaming all filenames to small letters
+directory = sys.argv[1]
+for filename in os.listdir(directory):
+    if os.path.isfile(os.path.join(directory, filename)):
+        os.rename(os.path.join(directory, filename), os.path.join(directory, filename.lower()))
+
+# Command line argument handling
+numeric_product = 1
+non_numeric_count = 0
+for arg in sys.argv[2:]:
+    try:
+        numeric_product *= int(arg)
+    except ValueError:
+        non_numeric_count += 1
+
+print(f"Product of numeric arguments: {numeric_product}")
+print(f"Count of non-numeric arguments: {non_numeric_count}")

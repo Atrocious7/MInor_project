@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Share</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        video {
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <div class="card-body text-center">
+                        <h1 class="card-title mb-4">Screen Sharing</h1>
+                        <video id="screen-video" class="w-100 mb-4" autoplay></video>
+                        <button id="switch-screen-btn" class="btn btn-custom" onclick="switchScreen()">Switch Screen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        let displayStream;
+
+        async function startScreenShare() {
+            try {
+                displayStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                const videoElement = document.getElementById('screen-video');
+                videoElement.srcObject = displayStream;
+
+                displayStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    alert('Screen sharing stopped');
+                    document.getElementById('switch-screen-btn').disabled = true;
+                });
+
+                document.getElementById('switch-screen-btn').disabled = false;
+            } catch (err) {
+                console.error("Error: " + err);
+            }
+        }
+
+        function switchScreen() {
+            if (displayStream) {
+                // Stop the current screen sharing
+                displayStream.getTracks().forEach(track => track.stop());
+            }
+            // Start a new screen sharing session
+            startScreenShare();
+        }
+
+        // Start screen sharing when the page loads
+        window.onload = startScreenShare;
+    </script>
+</body>
+
+</html>
