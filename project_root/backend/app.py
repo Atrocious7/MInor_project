@@ -142,6 +142,6 @@ def screenshare():
         return redirect(url_for('login_route'))
     return render_template('screenshare.html')
 
-
 if __name__ == '__main__':
     socketio.run(app, debug=True)
+
