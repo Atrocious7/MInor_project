@@ -36,7 +36,7 @@ def login_route():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
+        8
         # Connect to MySQL and check credentials
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)

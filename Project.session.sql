@@ -7,3 +7,5 @@ CREATE TABLE `users` (
     PRIMARY KEY (`id`)
 )
 SELECT * FROM Minor.users;
+
+DELETE FROM `users` WHERE `id` = 5;

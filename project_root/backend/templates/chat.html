@@ -10,7 +10,7 @@
     <style>
         body {
             background-color: #eef2f7;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Ubuntu', sans-serif;
             color: #333;
             margin: 0;
             padding: 0;
@@ -28,7 +28,7 @@
             padding: 20px;
             background-color: #fff;
             border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         .chat-section,
@@ -67,7 +67,7 @@
         }
 
         .generate-code button {
-            background-color: #1f6bff;
+            background-color: #1350eae7;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -76,7 +76,8 @@
         }
 
         .generate-code button:hover {
-            background-color: #155bcc;
+            background-color: #6e58e7;
+            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.2);
         }
 
         .chat-messages {
@@ -130,7 +131,7 @@
         }
 
         .chat-input button {
-            background-color: #1f6bff;
+            background-color: #155bcc;
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -139,7 +140,8 @@
         }
 
         .chat-input button:hover {
-            background-color: #155bcc;
+            background-color: #5315ef;
+            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
         }
 
         .whiteboard-btn,
@@ -161,7 +163,8 @@
 
         .whiteboard-btn button:hover,
         .screenshare-btn button:hover {
-            background-color: #155bcc;
+            background-color: #7421f1;
+            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
         }
 
         .file-section {
@@ -175,7 +178,7 @@
 
         .file-header h2 {
             font-size: 24px;
-            color: #1f6bff;
+            color: #1b63f3be;
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -193,7 +196,7 @@
         }
 
         .file-upload button {
-            background-color: #1f6bff;
+            background-color: #409beb;
             color: #fff;
             border: none;
             padding: 8px 20px;
@@ -205,6 +208,7 @@
 
         .file-upload button:hover {
             background-color: #155bcc;
+            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
         }
 
         .file-list {
@@ -237,10 +241,11 @@
 
         .file-item:hover {
             background-color: #d0e7f7;
+            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.01);
         }
 
         #delete-selected-btn {
-            background-color: #f44336;
+            background-color: #df362a;
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -251,20 +256,22 @@
         }
 
         #delete-selected-btn:hover {
-            background-color: #d32f2f;
+            background-color: #570a0a;
+            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
         }
 
         .notification {
             position: fixed;
             top: 10px;
             right: 10px;
-            background-color: #1f6bff;
+            background-color: #59cee8;
             color: white;
             padding: 15px;
             border-radius: 8px;
             opacity: 0;
             transition: opacity 1s ease-in-out;
             z-index: 1000;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .fade-in {
@@ -294,6 +301,36 @@
                 opacity: 0;
             }
         }
+
+        /* Notification styles */
+        #notification-for_delete {
+            top: 10px;
+            right: 10px;
+            background-color: #1f6bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            opacity: 0; /* Start as invisible */
+            transition: opacity 0.5s; /* Smooth transition for opacity */
+            z-index: 1000; /* Ensure it is above other elements */
+            position: fixed;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #notification-for_upload {
+            top: 60px; /* Adjust the position below the delete notification */
+            right: 10px;
+            background-color: #28a745; /* Success color */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            opacity: 0; /* Start as invisible */
+            transition: opacity 0.5s; /* Smooth transition for opacity */
+            z-index: 1000; /* Ensure it is above other elements */
+            position: fixed;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
     </style>
 </head>
 
@@ -364,10 +401,14 @@
                 }).then(response => {
                     if (response.ok) {
                         console.log('File uploaded successfully');
+                        showNotification(`${file.name} uploaded successfully!`, 'upload');
                     } else {
                         console.error('Failed to upload file');
+                        showNotification('Please select a file to upload.', 'upload');
                     }
                 });
+            } else {
+                showNotification('Please select a file to upload.', 'upload');
             }
         });
 
@@ -385,15 +426,63 @@
         // Function to delete selected files
         document.getElementById('delete-selected-btn').onclick = function () {
             const checkboxes = document.querySelectorAll('.file-checkbox');
+            const fileList = document.getElementById('file-list-ul');
+
+            // Create a notification element if it doesn't exist
+            let notification = document.getElementById('notification-for_delete');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification-for_delete';
+                document.body.appendChild(notification);
+            }
+
+            // Check if the file list is empty
+            if (fileList.children.length === 0) {
+                notification.textContent = "List is empty.";
+                notification.style.opacity = '1'; // Show the notification
+                setTimeout(() => { notification.style.opacity = '0'; }, 3000); // Fade out after 3 seconds
+                return; // Exit the function if the list is empty
+            }
+
+            // Check if any checkboxes are checked
+            let anyChecked = false;
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
+                    anyChecked = true; // At least one checkbox is checked
                     const fileItem = checkbox.closest('li');
                     if (fileItem) {
                         fileItem.remove(); // Remove the selected file item from the list
                     }
                 }
             });
+
+            // If no checkboxes were checked, show a notification
+            if (!anyChecked) {
+                showNotification("No files selected for deletion.", 'delete');
+            } else {
+                showNotification("Selected files deleted successfully.", 'delete');
+            }
         };
+
+        // Function to show the notification
+        function showNotification(message, type) {
+            let notification;
+            if (type === 'delete') {
+                notification = document.getElementById('notification-for_delete');
+            } else {
+                // Create a new notification element for upload
+                notification = document.getElementById('notification-for_upload');
+                if (!notification) {
+                    notification = document.createElement('div');
+                    notification.id = 'notification-for_upload';
+                    document.body.appendChild(notification);
+                }
+            }
+
+            notification.textContent = message;
+            notification.style.opacity = '1'; // Show the notification
+            setTimeout(() => { notification.style.opacity = '0'; }, 3000); // Fade out after 3 seconds
+        }
 
         // Sample room and username (replace with dynamic values in your application)
         const username = prompt("Enter your username:", "Guest");

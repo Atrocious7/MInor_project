@@ -49,7 +49,7 @@
                     <div class="card-body text-center">
                         <h1 class="card-title mb-4">Screen Sharing</h1>
                         <video id="screen-video" class="w-100 mb-4" autoplay></video>
-                        <button id="switch-screen-btn" class="btn btn-custom" onclick="switchScreen()">Switch Screen</button>
+                        <button id="Change-screen-btn" class="btn btn-custom" onclick="ChangeScreen()">Change Screen</button>
                     </div>
                 </div>
             </div>
@@ -71,16 +71,16 @@
 
                 displayStream.getVideoTracks()[0].addEventListener('ended', () => {
                     alert('Screen sharing stopped');
-                    document.getElementById('switch-screen-btn').disabled = true;
+                    // document.getElementById('Change-screen-btn').disabled = true;
                 });
 
-                document.getElementById('switch-screen-btn').disabled = false;
+                document.getElementById('Change-screen-btn').disabled = false;
             } catch (err) {
                 console.error("Error: " + err);
             }
         }
 
-        function switchScreen() {
+        function ChangeScreen() {
             if (displayStream) {
                 // Stop the current screen sharing
                 displayStream.getTracks().forEach(track => track.stop());
