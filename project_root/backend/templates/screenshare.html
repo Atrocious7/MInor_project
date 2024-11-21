@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Share with Marker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        video {
+            border-radius: 15px;
+        }
+
+        #drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 15px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <div class="card-body text-center">
+                        <h1 class="card-title mb-4">Screen Sharing with Marker</h1>
+                        <div style="position: relative;">
+                            <video id="screen-video" class="w-100 mb-4" autoplay></video>
+                            <canvas id="drawing-canvas" class="w-100 h-100"></canvas>
+                        </div>
+                        <button id="Change-screen-btn" class="btn btn-custom" onclick="ChangeScreen()">Change Screen</button>
+                        <button id="fullscreen-btn" class="btn btn-custom ms-2" onclick="toggleFullScreen()">Full Screen</button>
+                        <button id="toggle-marker-btn" class="btn btn-custom ms-2" onclick="toggleMarker()">Enable Marker</button>
+                        <button id="clear-canvas-btn" class="btn btn-custom ms-2" onclick="clearCanvas()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        let displayStream;
+        let drawing = false;
+        let context;
+        let markerEnabled = false;
+
+        async function startScreenShare() {
+            try {
+                displayStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                const videoElement = document.getElementById('screen-video');
+                videoElement.srcObject = displayStream;
+
+                displayStream.getVideoTracks()[0].addEventListener('ended', () => {
+                    alert('Screen sharing stopped');
+                });
+
+                document.getElementById('Change-screen-btn').disabled = false;
+
+                const canvas = document.getElementById('drawing-canvas');
+                context = canvas.getContext('2d');
+
+                // Adjust canvas size to match the video element
+                resizeCanvas();
+
+                // Attach event listeners for drawing
+                canvas.addEventListener('mousedown', startDrawing);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDrawing);
+                canvas.addEventListener('mouseout', stopDrawing);
+            } catch (err) {
+                console.error("Error: " + err);
+            }
+        }
+
+        function resizeCanvas() {
+            const videoElement = document.getElementById('screen-video');
+            const canvas = document.getElementById('drawing-canvas');
+            canvas.width = videoElement.offsetWidth;
+            canvas.height = videoElement.offsetHeight;
+        }
+
+        function startDrawing(event) {
+            if (!markerEnabled) return;
+            drawing = true;
+            context.beginPath();
+            context.moveTo(event.offsetX, event.offsetY);
+        }
+
+        function draw(event) {
+            if (!drawing) return;
+            context.lineTo(event.offsetX, event.offsetY);
+            context.strokeStyle = '#ff0000'; // Red color for marker
+            context.lineWidth = 5;
+            context.stroke();
+        }
+
+        function stopDrawing() {
+            drawing = false;
+            context.closePath();
+        }
+
+        function toggleMarker() {
+            markerEnabled = !markerEnabled;
+            const button = document.getElementById('toggle-marker-btn');
+            button.textContent = markerEnabled ? 'Disable Marker' : 'Enable Marker';
+            document.getElementById('drawing-canvas').style.pointerEvents = markerEnabled ? 'auto' : 'none';
+        }
+
+        function clearCanvas() {
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        }
+
+        function ChangeScreen() {
+            if (displayStream) {
+                displayStream.getTracks().forEach(track => track.stop());
+            }
+            startScreenShare();
+        }
+        function toggleFullScreen() {
+            const videoElement = document.getElementById('screen-video');
+            if (!document.fullscreenElement) {
+                videoElement.requestFullscreen().catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+            } 
+        else {
+            document.exitFullscreen();
+        }
+}
+
+        window.onresize = resizeCanvas;
+        window.onload = startScreenShare;
+    </script>
+</body>
+
+</html>
