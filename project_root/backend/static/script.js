@@ -164,7 +164,7 @@ document.getElementById('join-room-btn').onclick = function () {
 // Constants and Variables
 const recentKeywords = {}; // Stores keywords with their frequency
 let currentTopic = ''; // The current trending topic
-const API_KEY = 'AIzaSyCk_5FJ9PRXtjS3FMt_j9--41-bBfnY3Yg'; // Replace with your YouTube API key
+const API_KEY = ''; // Replace with your YouTube API key
 
 // Define a list of bad words for censorship
 const badWords = ["bc", "mc","drugs","smoking"]; // Add your bad words here
