@@ -22,9 +22,9 @@ socketio = SocketIO(app)
 # function.
 db_config = {
     'user': 'root',
-    'password': 'Anshu@2024',
+    'password': '',
     'host': 'localhost',
-    'database': 'Minor'
+    'database': ''
 }
 def get_db_connection():
     """Create a new database connection."""
