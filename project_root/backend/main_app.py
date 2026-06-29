@@ -13,7 +13,7 @@ import mysql.connector
 # The SocketIO object is used to create a real-time connection between the
 # client and server.
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ba06396ec4cbf0c69569d0677a2001b4bd706333ad8b241b6c447e8f8c3b3b6d'
+app.config['SECRET_KEY'] = ''
 socketio = SocketIO(app)
 
 # MySQL Configuration
