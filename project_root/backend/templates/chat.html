@@ -121,7 +121,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://unpkg.com/shepherd.js@8.1.0/dist/js/shepherd.min.js"></script>
-    <script>window.chatUsername = {{ username|tojson }}; window.youtubeApiKey = {{ config.YOUTUBE_API_KEY|tojson }};</script>
+    <script>window.chatUsername = {{ username|tojson }}; window.youtubeApiKey = {{ config.YOUTUBE_API_KEY|tojson }}; window.realtimeEnabled = {{ config.get('REALTIME_ENABLED', true)|tojson }};</script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

@@ -1,6 +1,10 @@
-// Initialize Socket.IO client
-
-const socket = io();
+// Vercel serves HTTP routes but cannot keep Socket.IO polling/WebSocket sessions alive.
+const realtimeEnabled = window.realtimeEnabled !== false;
+const localSocket = realtimeEnabled && typeof io === 'function' ? io() : null;
+const socket = localSocket || {
+    on() { return this; },
+    emit() { return this; }
+};
 
 socket.on('connect', function() {
     console.log('Socket.IO connected successfully');
@@ -492,7 +496,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const screenShareBtn = document.getElementById("open-screenshare-btn");
     const joinScreenShareBtn = document.getElementById("join-screenshare-btn");
     const videoElement = document.getElementById("screenshare-video");
-    const socket = io.connect(window.location.href);
+    const signalingSocket = realtimeEnabled && typeof io === 'function'
+        ? io.connect(window.location.href)
+        : socket;
     let currentRoom = null;
     let localStream = null;
     let peerConnection = null;
@@ -508,7 +514,7 @@ document.addEventListener("DOMContentLoaded", function () {
             localStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
             const user = prompt("Enter your name");
             const room = Math.random().toString(36).substring(2, 15);
-            socket.emit('start_screen_share', { user, room });
+            signalingSocket.emit('start_screen_share', { user, room });
             videoElement.srcObject = localStream;
             initWebRTC(room);
             currentRoom = room;
@@ -523,19 +529,19 @@ document.addEventListener("DOMContentLoaded", function () {
         localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
         peerConnection.onicecandidate = event => {
             if (event.candidate) {
-                socket.emit('webrtc_ice_candidate', { room, candidate: event.candidate });
+                signalingSocket.emit('webrtc_ice_candidate', { room, candidate: event.candidate });
             }
         };
 
         peerConnection.createOffer()
             .then(offer => peerConnection.setLocalDescription(offer))
             .then(() => {
-                socket.emit('webrtc_offer', { room, offer: peerConnection.localDescription });
+                signalingSocket.emit('webrtc_offer', { room, offer: peerConnection.localDescription });
             });
     }
 
     // Handle 'notify_screen_share' event when another user starts screen sharing
-    socket.on('notify_screen_share', function (data) {
+    signalingSocket.on('notify_screen_share', function (data) {
         currentRoom = data.room;
         console.log(`${data.user} started screen sharing in room: ${data.room}`);
     });
@@ -543,18 +549,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Join an existing screen share (Laptop B)
     joinScreenShareBtn?.addEventListener("click", function () {
         if (currentRoom) {
-            socket.emit('join_screen_share', { user: prompt("Enter your name"), room: currentRoom });
+            signalingSocket.emit('join_screen_share', { user: prompt("Enter your name"), room: currentRoom });
         } else {
             console.error("No active screen share to join.");
         }
     });
 
     // Handle incoming WebRTC offer (Laptop B)
-    socket.on('webrtc_offer', function (data) {
+    signalingSocket.on('webrtc_offer', function (data) {
         peerConnection = new RTCPeerConnection(iceServers);
         peerConnection.onicecandidate = event => {
             if (event.candidate) {
-                socket.emit('webrtc_ice_candidate', { room: data.room, candidate: event.candidate });
+                signalingSocket.emit('webrtc_ice_candidate', { room: data.room, candidate: event.candidate });
             }
         };
 
@@ -566,17 +572,17 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(() => peerConnection.createAnswer())
             .then(answer => peerConnection.setLocalDescription(answer))
             .then(() => {
-                socket.emit('webrtc_answer', { room: data.room, answer: peerConnection.localDescription });
+                signalingSocket.emit('webrtc_answer', { room: data.room, answer: peerConnection.localDescription });
             });
     });
 
     // Handle incoming WebRTC answer (Laptop A)
-    socket.on('webrtc_answer', function (data) {
+    signalingSocket.on('webrtc_answer', function (data) {
         peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
     });
 
     // Handle ICE candidate
-    socket.on('webrtc_ice_candidate', function (data) {
+    signalingSocket.on('webrtc_ice_candidate', function (data) {
         const candidate = new RTCIceCandidate(data.candidate);
         peerConnection.addIceCandidate(candidate).catch(err => {
             console.error("Error adding received ICE candidate:", err);
