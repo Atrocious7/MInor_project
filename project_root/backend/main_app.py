@@ -407,5 +407,6 @@ if __name__ == '__main__':
         app,
         debug=os.getenv('FLASK_DEBUG', '0') == '1',
         host='0.0.0.0',
-        port=int(os.getenv('PORT', '5000'))
+        port=int(os.getenv('PORT', '5000')),
+        allow_unsafe_werkzeug=True
     )
