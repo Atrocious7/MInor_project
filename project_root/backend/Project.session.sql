@@ -1,11 +1,9 @@
-create DATABASE Minor;
-use Minor;
 CREATE TABLE `users` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `username` varchar(255) NOT NULL,
     `password` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
-)
+);
 
 
 CREATE TABLE quizzes (
@@ -14,6 +12,13 @@ CREATE TABLE quizzes (
     difficulty VARCHAR(50) NOT NULL,
     num_questions INT NOT NULL
 );
+
+INSERT INTO quizzes (id, title, difficulty, num_questions) VALUES
+(4, 'Aptitude and Reasoning', 'Intermediate', 8),
+(5, 'Quantum Physics', 'Advanced', 8),
+(6, 'Aerospace Engineering', 'Advanced', 8),
+(7, 'String Theory', 'Advanced', 7),
+(8, 'Pharmacology', 'Intermediate', 7);
 
 
 CREATE TABLE questions (
@@ -81,10 +86,13 @@ INSERT INTO questions (quiz_id, question_text, option_a, option_b, option_c, opt
 (8, "What is the therapeutic use of beta-blockers like propranolol?", "Treatment of hypertension", "Treatment of asthma", "Management of diabetes", "Treatment of bacterial infections", "A");
 
 
-SELECT * from questions;
-
-
-ALTER TABLE quizzes DROP FOREIGN KEY quizzes_ibfk_1;
-
-ALTER TABLE quizzes DROP COLUMN pathway_id;
+CREATE TABLE quiz_results (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    score INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+);
 
