@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: eduquest
+    runtime: python
+    buildCommand: pip install -r project_root/requirements.txt
+    startCommand: python project_root/backend/main_app.py
+    healthCheckPath: /login
+    envVars:
+      - key: EDUQUEST_SECRET_KEY
+        generateValue: true
+      - key: EDUQUEST_DB_USER
+        sync: false
+      - key: EDUQUEST_DB_PASSWORD
+        sync: false
+      - key: EDUQUEST_DB_HOST
+        sync: false
+      - key: EDUQUEST_DB_NAME
+        value: Minor
+      - key: EDUQUEST_YOUTUBE_API_KEY
+        sync: false
