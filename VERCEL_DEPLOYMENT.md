@@ -8,7 +8,9 @@
    - `EDUQUEST_DB_USER`
    - `EDUQUEST_DB_PASSWORD`
    - `EDUQUEST_DB_HOST`
+   - `EDUQUEST_DB_PORT`
    - `EDUQUEST_DB_NAME`
+   - `EDUQUEST_DB_SSL_DISABLED=false`
    - `EDUQUEST_YOUTUBE_API_KEY` only if related videos are re-enabled.
 5. Use a hosted MySQL database and import `project_root/backend/Project.session.sql` before signing in.
 

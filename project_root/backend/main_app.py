@@ -32,7 +32,9 @@ db_config = {
     'user': os.getenv('EDUQUEST_DB_USER', 'root'),
     'password': os.getenv('EDUQUEST_DB_PASSWORD', ''),
     'host': os.getenv('EDUQUEST_DB_HOST', 'localhost'),
-    'database': os.getenv('EDUQUEST_DB_NAME', 'Minor')
+    'port': int(os.getenv('EDUQUEST_DB_PORT', '3306')),
+    'database': os.getenv('EDUQUEST_DB_NAME', 'Minor'),
+    'ssl_disabled': os.getenv('EDUQUEST_DB_SSL_DISABLED', 'false').lower() == 'true'
 }
 def get_db_connection():
     """Create a new database connection."""
