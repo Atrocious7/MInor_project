@@ -1,4 +1,4 @@
-SET SESSION sql_mode = REPLACE(@@sql_mode, 'ANSI_QUOTES', '');
+SET SESSION sql_mode = '';
 
 CREATE TABLE `users` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
