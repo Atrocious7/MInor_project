@@ -1,577 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Chat Room</title>
-    <style>
-        body {
-            background-color: #eef2f7;
-            font-family: 'Ubuntu', sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .chat-container {
-            display: flex;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .chat-section,
-        .file-section {
-            flex: 1;
-            margin-right: 20px;
-        }
-
-        .chat-section {
-            max-width: 800px;
-        }
-
-        .chat-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .chat-header h1 {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #1f6bff;
-        }
-
-        .welcome-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.3em;
-            margin-bottom: 20px;
-            color: #555;
-        }
-
-        .generate-code {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .generate-code button {
-            background-color: #1350eae7;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .generate-code button:hover {
-            background-color: #6e58e7;
-            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.2);
-        }
-
-        .chat-messages {
-            height: 400px;
-            overflow-y: scroll;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            margin-bottom: 20px;
-        }
-
-        .chat-message {
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 16px;
-            line-height: 1.4;
-        }
-
-        .chat-message.user {
-            background-color: #e1f5fe;
-            text-align: right;
-            border: 1px solid #c8e4fb;
-        }
-
-        .chat-message.other {
-            background-color: #f1f8e9;
-            border: 1px solid #e1f5ce;
-        }
-
-        .chat-message small {
-            display: block;
-            font-size: 0.85em;
-            color: #888;
-        }
-
-        .chat-input {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .chat-input input[type="text"] {
-            flex-grow: 1;
-            margin-right: 10px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .chat-input button {
-            background-color: #155bcc;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .chat-input button:hover {
-            background-color: #5315ef;
-            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
-        }
-
-        .whiteboard-btn,
-        .screenshare-btn {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .whiteboard-btn button,
-        .screenshare-btn button {
-            background-color: #1f6bff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .whiteboard-btn button:hover,
-        .screenshare-btn button:hover {
-            background-color: #7421f1;
-            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
-        }
-
-        .file-section {
-            max-width: 350px;
-        }
-
-        .file-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .file-header h2 {
-            font-size: 24px;
-            color: #1b63f3be;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .file-upload {
-            margin-bottom: 20px;
-        }
-
-        .file-upload input[type="file"] {
-            border-radius: 5px;
-            padding: 8px;
-            background-color: #f1f3f5;
-            border: 1px solid #ddd;
-            font-size: 14px;
-        }
-
-        .file-upload button {
-            background-color: #409beb;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .file-upload button:hover {
-            background-color: #155bcc;
-            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
-        }
-
-        .file-list {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            height: 400px;
-            overflow-y: auto;
-        }
-
-        .file-item {
-            padding: 10px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            background-color: #e3f2fd;
-            display: flex;
-            align-items: center;
-        }
-
-        .file-item a {
-            text-decoration: none;
-            color: #333;
-            flex-grow: 1;
-        }
-
-        .file-item input[type="checkbox"] {
-            margin-right: 10px;
-        }
-
-        .file-item:hover {
-            background-color: #d0e7f7;
-            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.01);
-        }
-
-        #delete-selected-btn {
-            background-color: #df362a;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        #delete-selected-btn:hover {
-            background-color: #570a0a;
-            box-shadow: 0 0 10px 10px rgba(8, 7, 7, 0.1);
-        }
-
-        .notification {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: #59cee8;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            z-index: 1000;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .fade-in {
-            animation: fadeIn 1s forwards;
-        }
-
-        .fade-out {
-            animation: fadeOut 1s forwards;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeOut {
-            0% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-            }
-        }
-
-        /* Notification styles */
-        #notification-for_delete {
-            top: 10px;
-            right: 10px;
-            background-color: #1f6bff;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            opacity: 0; /* Start as invisible */
-            transition: opacity 0.5s; /* Smooth transition for opacity */
-            z-index: 1000; /* Ensure it is above other elements */
-            position: fixed;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        #notification-for_upload {
-            top: 60px; /* Adjust the position below the delete notification */
-            right: 10px;
-            background-color: #28a745; /* Success color */
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            opacity: 0; /* Start as invisible */
-            transition: opacity 0.5s; /* Smooth transition for opacity */
-            z-index: 1000; /* Ensure it is above other elements */
-            position: fixed;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-    </style>
+    <meta name="theme-color" content="#080b14">
+    <title>EduQuest | Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@8.1.0/dist/css/shepherd.css">
 </head>
-
 <body>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Primary navigation">
+            <div class="brand">
+                <img class="brand-mark" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="EduQuest logo">
+                <div><span class="brand-name">EDUQUEST</span><span class="brand-subtitle">Collaborative learning</span></div>
+            </div>
+            <div class="nav-label">Workspace</div>
+            <nav class="sidebar-nav">
+                <a class="sidebar-item active" href="{{ url_for('chat') }}"><span class="icon" aria-hidden="true">&#8962;</span>Chat</a>
+                <a class="sidebar-item" href="{{ url_for('quizzes') }}"><span class="icon" aria-hidden="true">&#10003;</span>Quizzes</a>
+                <a class="sidebar-item" href="{{ url_for('view_progress') }}"><span class="icon" aria-hidden="true">&#8599;</span>Progress</a>
+            </nav>
+            <div class="nav-label">Collaborate</div>
+            <nav class="sidebar-nav">
+                <a class="sidebar-item" href="{{ url_for('whiteboard') }}" target="_blank"><span class="icon" aria-hidden="true">&#9998;</span>Whiteboard</a>
+                <a class="sidebar-item" href="{{ url_for('screenshare') }}" target="_blank"><span class="icon" aria-hidden="true">&#9635;</span>Screen share</a>
+                <button class="sidebar-item" id="start-tour-btn" type="button"><span class="icon" aria-hidden="true">&#8635;</span>Restart tour</button>
+            </nav>
+            <div class="sidebar-spacer"></div>
+            <div class="muted">Signed in as {{ username }}</div>
+        </aside>
 
-    <div class="container chat-container">
-        <div class="chat-section">
-            <div class="chat-header">
-                <h1>Chat Room</h1>
-                <div class="welcome-title">Welcome to Chat</div>
-                <div class="generate-code">
-                    <button id="generate-code-btn" class="btn btn-outline-secondary" onclick="generateRoomCode()">Generate Room Code</button>
-                    <p id="generated-code" class="mt-2"></p>
+        <div class="workspace">
+            <header class="topbar">
+                <input class="topbar-search" type="search" placeholder="Search your workspace" aria-label="Search workspace">
+                <div class="topbar-user"><span class="avatar">{{ username[:1]|upper }}</span><span>{{ username }}</span></div>
+            </header>
+
+            <main class="page">
+                <div class="page-header">
+                    <div>
+                        <p class="eyebrow">Workspace / Collaboration</p>
+                        <h1 class="page-title">Chat room</h1>
+                        <p class="page-subtitle">Learn together, share ideas, and keep your study group moving.</p>
+                    </div>
+                    <div class="muted" aria-label="Connection status"><span style="color: var(--success)">&#9679;</span> Connected</div>
                 </div>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-                <!-- Chat messages will be appended here -->
-            </div>
-            <div class="chat-input">
-                <input type="text" id="message-input" class="form-control" placeholder="Type a message">
-                <button id="send-btn" class="btn btn-primary">Send</button>
-            </div>
 
-            <div class="whiteboard-btn">
-                <button id="open-whiteboard-btn" class="btn btn-outline-primary">Open Whiteboard in New Window</button>
-            </div>
-            <div class="screenshare-btn">
-                <button id="open-screenshare-btn" class="btn btn-outline-primary">Start Screen Share</button>
-            </div>
-        </div>
-        <div class="file-section">
-            <div class="file-header">
-                <h2>Uploaded Files</h2>
-            </div>
-            <div class="file-upload">
-                <form id="upload-form" enctype="multipart/form-data">
-                    <input type="file" id="file-input" class="form-control-file">
-                    <button type="submit" class="btn btn-outline-secondary mt-2">Upload File</button>
-                </form>
-            </div>
-            <div class="file-list" id="file-list">
-                <ul id="file-list-ul">
-                    <!-- File list will be populated dynamically -->
-                </ul>
-            </div>
-            <button id="delete-selected-btn" class="btn btn-outline-danger mt-2">Delete Selected Files</button>
+                <div class="chat-layout">
+                    <section class="card chat-main" aria-labelledby="chat-heading">
+                        <div class="chat-header">
+                            <div>
+                                <h2 id="chat-heading">Live conversation</h2>
+                                <div class="welcome-title">Welcome to your collaborative room</div>
+                                <div class="room-card" id="generated-code" aria-live="polite"><span class="muted">Room code</span></div>
+                            </div>
+                            <div class="room-actions">
+                                <button id="generate-code-btn" class="btn btn-primary" type="button" onclick="generateRoomCode()">Generate room code</button>
+                                <div class="join-room">
+                                    <label class="sr-only" for="join-room-code">Room code</label>
+                                    <input id="join-room-code" type="text" placeholder="Room code" autocomplete="off">
+                                    <button id="join-room-btn" class="btn btn-ghost" type="button">Join</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Chat messages"></div>
+                        <div class="chat-input">
+                            <label class="sr-only" for="message-input">Message</label>
+                            <input id="message-input" type="text" placeholder="Type a message..." autocomplete="off">
+                            <button id="send-btn" class="btn btn-primary" type="button" aria-label="Send message">Send <span aria-hidden="true">&#8594;</span></button>
+                        </div>
+
+                        <div class="chat-tools" aria-label="Collaboration tools">
+                            <button id="host-call-btn" class="btn btn-ghost" type="button">Host video call</button>
+                            <button id="join-call-btn" class="btn btn-ghost" type="button">Join video call</button>
+                            <button id="open-whiteboard-btn" class="btn btn-ghost" type="button">Open whiteboard</button>
+                            <button id="open-screenshare-btn" class="btn btn-ghost" type="button">Start screen share</button>
+                            <button id="join-screenshare-btn" class="btn btn-ghost" type="button">Join screen share</button>
+                            <button id="screenshot-btn" class="btn btn-ghost" type="button">Capture screenshot</button>
+                            <button id="open-ai-chat-btn" class="btn btn-ghost" type="button" onclick="openAIChat()">Open AI assistant</button>
+                            <a class="btn btn-primary" href="{{ url_for('quizzes') }}" target="_blank">Open quizzes <span aria-hidden="true">&#8594;</span></a>
+                        </div>
+                    </section>
+
+                    <aside class="utility-stack" aria-label="Room utilities">
+                        <section class="card file-section">
+                            <div class="file-header"><h2>Shared files</h2><span class="muted">Room assets</span></div>
+                            <div class="file-upload">
+                                <form id="upload-form" enctype="multipart/form-data">
+                                    <label class="muted" for="file-input">Upload a file</label>
+                                    <input id="file-input" type="file">
+                                    <button id="upload-btn" class="btn btn-primary" type="submit">Upload file</button>
+                                </form>
+                            </div>
+                            <div class="file-list" id="file-list">
+                                <ul id="file-list-ul"></ul>
+                            </div>
+                            <button id="delete-selected-btn" class="btn btn-danger" type="button">Delete selected</button>
+                            <button id="chat-back-btn" class="btn btn-ghost" type="button">Back up chat</button>
+                        </section>
+
+                        <section class="card">
+                            <h2 class="card-title">Collaboration tools</h2>
+                            <div class="tool-list">
+                                <button class="btn btn-ghost" type="button" onclick="openAIChat()">AI assistant <span class="muted">Ask for help</span></button>
+                                <a class="btn btn-ghost" href="{{ url_for('whiteboard') }}" target="_blank">Whiteboard <span class="muted">Open canvas</span></a>
+                                <a class="btn btn-ghost" href="{{ url_for('screenshare') }}" target="_blank">Screen share <span class="muted">Open room</span></a>
+                            </div>
+                        </section>
+
+                        <a class="quiz-link" href="{{ url_for('quizzes') }}" target="_blank"><strong>Quizzes</strong><span class="muted">Test your knowledge &#8594;</span></a>
+                    </aside>
+                </div>
+                <video id="screenshare-video" class="screen-share-preview" autoplay playsinline></video>
+            </main>
         </div>
     </div>
 
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script>
-        const socket = io();
-
-        const uploadForm = document.getElementById('upload-form');
-        const fileInput = document.getElementById('file-input');
-        const fileList = document.getElementById('file-list-ul');
-
-        // Handle file uploads
-        uploadForm.addEventListener('submit', e => {
-            e.preventDefault();
-            const file = fileInput.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('file', file);
-                fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                }).then(response => {
-                    if (response.ok) {
-                        console.log('File uploaded successfully');
-                        showNotification(`${file.name} uploaded successfully!`, 'upload');
-                    } else {
-                        console.error('Failed to upload file');
-                        showNotification('Please select a file to upload.', 'upload');
-                    }
-                });
-            } else {
-                showNotification('Please select a file to upload.', 'upload');
-            }
-        });
-
-        // Handle file upload events
-        socket.on('fileUploaded', data => {
-            const fileItem = document.createElement('li');
-            fileItem.classList.add('file-item');
-            fileItem.innerHTML = `
-                <input type="checkbox" class="file-checkbox">
-                <a href="${data.url}" target="_blank">${data.name}</a>
-            `;
-            fileList.appendChild(fileItem);
-        });
-
-        // Function to delete selected files
-        document.getElementById('delete-selected-btn').onclick = function () {
-            const checkboxes = document.querySelectorAll('.file-checkbox');
-            const fileList = document.getElementById('file-list-ul');
-
-            // Create a notification element if it doesn't exist
-            let notification = document.getElementById('notification-for_delete');
-            if (!notification) {
-                notification = document.createElement('div');
-                notification.id = 'notification-for_delete';
-                document.body.appendChild(notification);
-            }
-
-            // Check if the file list is empty
-            if (fileList.children.length === 0) {
-                notification.textContent = "List is empty.";
-                notification.style.opacity = '1'; // Show the notification
-                setTimeout(() => { notification.style.opacity = '0'; }, 3000); // Fade out after 3 seconds
-                return; // Exit the function if the list is empty
-            }
-
-            // Check if any checkboxes are checked
-            let anyChecked = false;
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    anyChecked = true; // At least one checkbox is checked
-                    const fileItem = checkbox.closest('li');
-                    if (fileItem) {
-                        fileItem.remove(); // Remove the selected file item from the list
-                    }
-                }
-            });
-
-            // If no checkboxes were checked, show a notification
-            if (!anyChecked) {
-                showNotification("No files selected for deletion.", 'delete');
-            } else {
-                showNotification("Selected files deleted successfully.", 'delete');
-            }
-        };
-
-        // Function to show the notification
-        function showNotification(message, type) {
-            let notification;
-            if (type === 'delete') {
-                notification = document.getElementById('notification-for_delete');
-            } else {
-                // Create a new notification element for upload
-                notification = document.getElementById('notification-for_upload');
-                if (!notification) {
-                    notification = document.createElement('div');
-                    notification.id = 'notification-for_upload';
-                    document.body.appendChild(notification);
-                }
-            }
-
-            notification.textContent = message;
-            notification.style.opacity = '1'; // Show the notification
-            setTimeout(() => { notification.style.opacity = '0'; }, 3000); // Fade out after 3 seconds
-        }
-
-        // Sample room and username (replace with dynamic values in your application)
-        const username = prompt("Enter your username:", "Guest");
-
-        // Function to simulate joining the chat
-        function joinChat(username) {
-            const chatMessages = document.getElementById('chat-messages');
-
-            // Display user joined message
-            const joinMessage = document.createElement('div');
-            joinMessage.classList.add('chat-message', 'other');
-            joinMessage.innerHTML = `<strong>${username}</strong> has joined the chat<small>${new Date().toLocaleTimeString()}</small>`;
-            chatMessages.appendChild(joinMessage);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            // Display a popup notification
-            const notification = document.createElement('div');
-            notification.classList.add('notification');
-            notification.textContent = `${username} joined the chat`;
-            document.body.appendChild(notification);
-
-            // Add fade-in effect
-            notification.classList.add('fade-in');
-
-            // Add fade-out effect after 3 seconds
-            setTimeout(function () {
-                notification.classList.add('fade-out');
-            }, 3000);
-
-            // Remove the notification after fade-out completes (4 seconds)
-            setTimeout(function () {
-                notification.remove();
-            }, 4000);
-        }
-
-        // Call the function to join the chat
-        joinChat(username);
-
-        // Function to send a message
-        function sendMessage(message) {
-            if (message.trim() !== '') {
-                const chatMessages = document.getElementById('chat-messages');
-                const newMessage = document.createElement('div');
-                newMessage.classList.add('chat-message', 'user');
-                newMessage.innerHTML = `<strong>${username}</strong>: ${message}<small class="float-end">${new Date().toLocaleTimeString()}</small>`;
-                chatMessages.appendChild(newMessage);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                // Clear the message input field after sending the message
-                document.getElementById('message-input').value = '';
-            }
-        }
-
-        // Send message on button click
-        document.getElementById('send-btn').onclick = function () {
-            const messageInput = document.getElementById('message-input');
-            const message = messageInput.value.trim();
-            sendMessage(message);
-        };
-
-        // Send message on pressing Enter key
-        document.getElementById('message-input').addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                const message = event.target.value.trim();
-                sendMessage(message);
-            }
-        });
-
-        // Open the whiteboard in a new window
-        document.getElementById('open-whiteboard-btn').onclick = function () {
-            const whiteboardWindow = window.open('/whiteboard', '_blank');
-            whiteboardWindow.focus();
-        };
-
-        // Open the screen share in a new window
-        document.getElementById('open-screenshare-btn').onclick = function () {
-            const screenshareWindow = window.open('/screenshare', '_blank');
-            screenshareWindow.focus();
-        };
-
-        // Function to generate a room code
-        function generateRoomCode() {
-            // Generate a random room code
-            const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-            // Display the generated code in the <p> element with id="generated-code"
-            document.getElementById('generated-code').textContent = `Room Code: ${roomCode}`;
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/shepherd.js@8.1.0/dist/js/shepherd.min.js"></script>
+    <script>window.chatUsername = {{ username|tojson }}; window.youtubeApiKey = {{ config.YOUTUBE_API_KEY|tojson }};</script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
-
 </html>
